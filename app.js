@@ -14,14 +14,18 @@ client.login(process.env.DISCORD_TOKEN);
 
 // captar mensaje
 client.on("messageCreate", (msg) => {
-    console.log(msg);
 
     if (msg.author.bot) {
-        return console.log(`Mensaje de ${msg.author.username}`)
+        return console.log(`Mensaje de ${msg.author.username}`);
     } 
     
     if (msg.content.startsWith(prefix)) {
-        return msg.reply("Hello, I'm Emma Frost")
+        const argumentos = msg.content.slice(prefix.length).split(/ +/);
+        
+        const comando = argumentos.shift().toLowerCase();
+
+        if (comando == "ping") return msg.reply("pong");
+
     }
 
 })
