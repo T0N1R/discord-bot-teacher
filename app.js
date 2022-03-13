@@ -1,5 +1,9 @@
-const {Client, Intents, MessageEmbed} = require("discord.js");
-require("dotenv").config();
+import { Client, Intents, MessageEmbed } from 'discord.js';
+import sendReg from './embedMsg/sendReg.js'
+import dotenv from 'dotenv';
+import characters from './characters/characters.js'
+
+dotenv.config();
 
 const prefix = "$"
 
@@ -7,11 +11,18 @@ const client = new Client({intents:[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_ME
 
 // codigo
 client.once('ready', (bot) => {
-    console.log(`Bot: ${bot.user.username}\nStatus: ${bot.presence.status}`);
+    console.log(
+        `Bot: ${bot.user.username} \n Status: ${bot.presence.status}`
+        );
+
+    client.user.setStatus('online');
+    client.user.setActivity('Quiet Council', {type: "WATCHING"});
+
 });
 
 client.login(process.env.DISCORD_TOKEN);
 
+// first Embed Message
 // Embed Message
 const me = new MessageEmbed()
     .setColor([0,255,255])
@@ -49,6 +60,9 @@ const me = new MessageEmbed()
     })
 
 
+
+// https://ouroboros.world/sites/default/files/inline-images/IMG_20191002_100040.jpg
+
 // captar mensaje
 client.on("messageCreate", (msg) => {
 
@@ -61,18 +75,39 @@ client.on("messageCreate", (msg) => {
         
         const comando = argumentos.shift().toLowerCase();
 
-        const me2 = new MessageEmbed()
-            .setColor([138,50,252])
-            .setTitle(comando)
-            .setAuthor({
-                name: msg.author.username, 
-                iconURL: msg.author.displayAvatarURL(),
-            })
-            .setDescription(`El comando elegido es ${comando}`);
-
-        msg.channel.send({embeds: [me2] })
-
         if (comando == "welcome") return msg.reply({embeds: [me]});
+
+        if (msg.channel.name == "quiet-council"){
+            
+            if(comando == "reg"){
+                let messageFields = 
+                [{
+                    name: "Registration",
+                    value:"Welcome to the Quiet Council, my name is Charles Xavier"
+                }]
+
+                let messageE = sendReg(characters.charles_xavier, messageFields);
+                msg.channel.send({embeds: [messageE] });
+
+            }
+
+        }
+
+        if (msg.channel.name == "hellfire-trading-company"){
+
+            if(comando == "reg"){
+                let messageFields = 
+                [{
+                    name: "Registration",
+                    value:"Welcome to the Hellfire Trading Company, my name is Emma Frost"
+                }]
+
+                let messageE = sendReg(characters.emma_frost, messageFields);
+                msg.channel.send({embeds: [messageE] });
+
+            }
+
+        }
 
     }
 
