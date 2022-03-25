@@ -1,5 +1,11 @@
 import { MessageEmbed } from "discord.js";
 
+/**
+ * embedMessage with confirming registration, the character sending the message is based on chat location
+ * @param {object} charaterInfo object with character name,url and images
+ * @param {object} messageContent obect with message content
+ * @returns embedMessage
+ */
 const sendReg = (charaterInfo, messageContent) => {
     let registerMessage = new MessageEmbed()
         .setColor(charaterInfo.emColor)

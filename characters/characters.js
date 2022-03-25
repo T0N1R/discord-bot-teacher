@@ -1,5 +1,6 @@
-// characters names and images for personal embed message
-
+/**
+ * characters names and images for personal embed message
+ */
 const characters = {
     emma_frost : {
         name: 'Emma Frost', 
