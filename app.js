@@ -150,7 +150,6 @@ client.on("messageCreate", (msg) => {
 
         if (comando == "voice") {
             ONLINE_USERS = get_online_users(msg, BOT_ID);
-            //msg.guild.members.cache.get("414643923462520833").voice.setChannel("948467918952357893");
             redirect_voicechat_all(msg, argumentos[0], ONLINE_USERS)
 
         }
