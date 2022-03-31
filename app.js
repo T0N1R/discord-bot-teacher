@@ -3,12 +3,15 @@ import sendReg from './embedMsg/sendReg.js'
 import dotenv from 'dotenv';
 import characters from './characters/characters.js'
 import welcomeMsg from './embedMsg/welcomeMsg.js';
+import get_online_users from './common-functions/get-online-users.js';
+import redirect_voicechat_all from './common-functions/redirect-to-voicechat.js'
 
 dotenv.config();
 
 const prefix = "$"
-
-const client = new discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
+const client = new discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"] });
+let BOT_ID = ""
+let ONLINE_USERS = []
 
 let slashCommands = [
     {
@@ -39,8 +42,9 @@ client.slash = new discord.Collection();
 
 // codigo
 client.once('ready', async (bot) => {
+    BOT_ID = bot.user.id
     console.log(
-        `Bot: ${bot.user.username} \n Status: ${bot.presence.status}`
+        `Bot: ${bot.user.username} \n Status: ${bot.presence.status} \n ID: ${bot.user.id}`
     );
 
     client.user.setStatus('online');
@@ -60,7 +64,11 @@ client.login(process.env.DISCORD_TOKEN);
 
 // https://ouroboros.world/sites/default/files/inline-images/IMG_20191002_100040.jpg
 
+/**
+ * creado para slash commands
+ */
 client.on("interactionCreate", async (interaction) => {
+
     if (interaction.isCommand()) {
         await interaction.deferReply({ ephemeral: false }).catch((obj) => {
             console.log(obj)
@@ -85,7 +93,9 @@ client.on("interactionCreate", async (interaction) => {
     }
 })
 
-// captar mensaje
+/**
+ * Captar mensaje
+ */
 client.on("messageCreate", (msg) => {
 
     if (msg.author.bot) {
@@ -97,6 +107,12 @@ client.on("messageCreate", (msg) => {
 
         const comando = argumentos.shift().toLowerCase();
 
+        console.log(argumentos)
+        console.log(comando)
+
+        /**
+         * Saludo en el quiet-concil
+         */
         if (msg.channel.name == "quiet-council") {
 
             if (comando == "reg") {
@@ -107,12 +123,15 @@ client.on("messageCreate", (msg) => {
                     }]
 
                 let messageE = sendReg(characters.charles_xavier, messageFields);
-                msg.channel.reply({ embeds: [messageE] });
+                msg.channel.send({ embeds: [messageE] });
 
             }
 
         }
 
+        /**
+         * Saludos en el hellfire company
+         */
         if (msg.channel.name == "hellfire-trading-company") {
 
             if (comando == "reg") {
@@ -126,6 +145,12 @@ client.on("messageCreate", (msg) => {
                 msg.channel.send({ embeds: [messageE] });
 
             }
+
+        }
+
+        if (comando == "voice") {
+            ONLINE_USERS = get_online_users(msg, BOT_ID);
+            redirect_voicechat_all(msg, argumentos[0], ONLINE_USERS)
 
         }
 
