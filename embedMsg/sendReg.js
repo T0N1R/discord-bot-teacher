@@ -24,4 +24,4 @@ const sendReg = (charaterInfo, messageContent) => {
     return registerMessage;
 }
 
-export default sendReg
+export default sendReg;
