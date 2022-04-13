@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import characters from './characters/characters.js'
 import welcomeMsg from './embedMsg/welcomeMsg.js';
 import get_online_users from './common-functions/get-online-users.js';
-import redirect_voicechat_all from './common-functions/redirect-to-voicechat.js'
+import redirect_voicechat_all from './common-functions/redirect-to-voicechat.js';
+import get_voice_channels from './common-functions/get-voice-channels.js';
 
 dotenv.config();
 
@@ -148,10 +149,14 @@ client.on("messageCreate", (msg) => {
 
         }
 
-        if (comando == "voice") {
+        if (comando == "voiceall") {
             ONLINE_USERS = get_online_users(msg, BOT_ID);
             redirect_voicechat_all(msg, argumentos[0], ONLINE_USERS)
+        }
 
+        if (comando == "vchannels") {
+            let result_dict = get_voice_channels(msg, BOT_ID);
+            console.log(result_dict)
         }
 
     }
