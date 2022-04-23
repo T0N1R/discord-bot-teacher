@@ -109,7 +109,7 @@ client.on("messageCreate", (msg) => {
         const comando = argumentos.shift().toLowerCase();
 
         console.log(argumentos)
-        console.log(comando)
+        console.log("comando: " + comando)
 
         /**
          * Saludo en el quiet-concil
@@ -149,9 +149,37 @@ client.on("messageCreate", (msg) => {
 
         }
 
+        /**
+         * COMANDO: voiceall
+         * mover a todos los usuarios que estan en un voice channel a uno especifico
+         */
         if (comando == "voiceall") {
+            // obtener los usuarios en linea
             ONLINE_USERS = get_online_users(msg, BOT_ID);
-            redirect_voicechat_all(msg, argumentos[0], ONLINE_USERS)
+            
+            // diccionario con nombre de voice channel y su id
+            let voice_channels_dict = get_voice_channels(msg, BOT_ID);
+
+            let combined_arguments = "";
+
+            // combinar argumentos en un solo string (para ponder reconocer nombres como "Grupo 1")
+            for (let index = 0; index < argumentos.length; index++) {
+                if (index != 0){
+                    combined_arguments = combined_arguments + " ";
+                }
+                combined_arguments = combined_arguments + argumentos[index];
+            }
+
+            console.log("Combined arguments: " + combined_arguments);
+
+            if (voice_channels_dict[combined_arguments] != undefined) {
+                try {
+                    redirect_voicechat_all(msg, combined_arguments ,voice_channels_dict[combined_arguments], ONLINE_USERS);
+                } catch (e){
+                    msg.reply("hubo un problema")
+                }
+            }
+            
         }
 
         if (comando == "vchannels") {
