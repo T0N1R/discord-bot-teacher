@@ -10,7 +10,8 @@ import get_voice_channels from './common-functions/get-voice-channels.js';
 dotenv.config();
 
 const prefix = "$"
-const client = new discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"] });
+const client = new discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS'],
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 let BOT_ID = ""
 let ONLINE_USERS = []
 
@@ -93,6 +94,16 @@ client.on("interactionCreate", async (interaction) => {
 
     }
 })
+
+client.on('messageReactionAdd', (reaction, user) => {
+
+    console.log('a reaction has been added');
+    
+    console.log(reaction)
+
+    console.log(user)
+    
+});
 
 /**
  * Captar mensaje
